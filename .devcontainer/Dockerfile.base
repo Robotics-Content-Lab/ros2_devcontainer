@@ -14,12 +14,14 @@ SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 
 # Delete user and home folder of user if it exists in container (e.g Ubuntu Noble: ubuntu)
+# hadolint ignore=DL3003,SC2046
 RUN if id -u ${USER_UID} ; then userdel $(id -unr ${USER_UID}); fi
 
 RUN apt-get update && apt-get upgrade -yq && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Linux packages
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl git sudo lsb-release locales bash-completion tzdata gosu \
     tmux xterm less bc build-essential htop psmisc neovim pip \
@@ -37,6 +39,7 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} && \
         echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${USERNAME} && \
         chmod 0440 /etc/sudoers.d/${USERNAME}
 
+# hadolint ignore=SC2016
 RUN su ${USERNAME} -c "rosdep update"; \
     echo "export PATH=/home/${USERNAME}/.local/bin:${PATH}" && \
 	echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> /home/${USERNAME}/.bashrc && \

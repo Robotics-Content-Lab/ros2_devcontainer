@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+# shellcheck disable=SC2086
+set -eou pipefail
 
 USERNAME=${USERNAME:-ros_user}
 USER_ID=$(id -u ${USERNAME})

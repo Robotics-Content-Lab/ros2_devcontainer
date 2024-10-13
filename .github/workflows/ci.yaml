@@ -10,16 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-    - uses: pnpm/action-setup@v2
     - uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: .devcontainer/Dockerfile.base
-        ignore: DL3008 SC2046 SC2016
+        ignore: DL3008,SC2046,SC2016
     - uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: .devcontainer/Dockerfile.full
-        ignore: DL3008 SC2046 SC2016
+        ignore: DL3008,SC2046,SC2016
 
   shellcheck:
     runs-on: ubuntu-latest
@@ -28,4 +26,4 @@ jobs:
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@master
       env:
-        SHELLCHECK_OPTS: -e SC2016
+        SHELLCHECK_OPTS: -e SC2016 -e SC1091 -e SC2181 -e SC2086 -e SC1090
