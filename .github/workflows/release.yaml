@@ -1,5 +1,5 @@
-name: Docker Image Deployment
-
+name: CD
+run-name: CD that deploys the Docker images to ghcr.io
 on:
   workflow_run:
     workflows: ["CI Workflow that runs hadolint and shellcheck"]
@@ -54,3 +54,7 @@ jobs:
           bash .github/build_and_push.sh
         env:
           ROS_DISTROS: ${{ env.ROS_DISTROS }}
+        # Cache the osrf/${ROS_DISTRO}-desktop-full images
+        # to speed up the build process
+        cache:
+          key: ${{ runner.os }}-ros-${{ env.ROS_DISTROS }}-desktop-full

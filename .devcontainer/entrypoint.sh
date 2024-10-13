@@ -1,6 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2086
-set -eou pipefail
+set -e
 
 USERNAME=${USERNAME:-ros_user}
 USER_ID=$(id -u ${USERNAME})
@@ -15,7 +15,7 @@ cd /home/${USERNAME}
 gosu ${USERNAME} build_ws
 
 if [ -z "$1" ]; then
-    set -- /bin/bash -l
+    exec gosu ${USERNAME} /bin/bash
 else
     exec gosu ${USERNAME} "$@"
 fi

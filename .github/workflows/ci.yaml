@@ -1,4 +1,5 @@
-name: CI Workflow that runs hadolint and shellcheck
+name: CI
+run-name: CI Workflow that runs hadolint and shellcheck
 on:
   push:
     branches: [ "main" ]

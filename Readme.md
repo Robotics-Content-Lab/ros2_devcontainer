@@ -12,11 +12,14 @@
 
 ### Setting Up the Devcontainer
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/Robotics-Content-Lab/ros2_devcontainer
-    cd https://github.com/Robotics-Content-Lab/ros2_devcontainer
-    ```
+1. Use the template repository:
+   1. via CLI:
+        ```sh
+        gh repo create ros2_ws --template Robotics-Content-Lab/ros2_devcontainer --private --clone
+        ```
+    2. via GitHub:
+        1. Click on the "Use this template" button.
+        2. Create a new repository.
 2. Add your ROS 2 colcon packages to the `src` directory.
 
 3. Open the repository in Visual Studio Code.
