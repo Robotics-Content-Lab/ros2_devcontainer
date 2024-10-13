@@ -1,9 +1,12 @@
 #!/bin/bash
-# shellcheck disable=SC2086
-
+# shellcheck disable=SC2086,SC2181
 set -eou pipefail
 
-ROS_DISTROS=("rolling" "jazzy" "iron")
+# take ROS_DISTROS from the environment variable or default to "rolling"
+ROS_DISTROS=${ROS_DISTROS:-"rolling"}
+# if ROS_DISTROS contains a " " (space), split it into an array
+IFS=' ' read -r -a ROS_DISTROS <<< "$ROS_DISTROS"
+
 BASE_DIR=$(git rev-parse --show-toplevel)
 if [ $? -ne 0 ]; then
     echo "Error: Could not find base directory of repository."

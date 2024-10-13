@@ -7,17 +7,34 @@ on:
       - completed
 
 jobs:
+  files_changed:
+    runs-on: ubuntu-latest
+    outputs:
+      run_deploy: ${{ steps.files_changed.outputs.run_deploy }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for relevant file changes
+        id: files_changed
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -qE '\.devcontainer/.*Dockerfile.*|\.devcontainer/.*\.sh$'; then
+            echo "run_deploy=true" >> $GITHUB_ENV
+          else
+            echo "run_deploy=false" >> $GITHUB_ENV
+          fi
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion && needs.files_changed.outputs.run_deploy == 'true' }}
+    needs: files_changed
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
+    env:
+      ROS_DISTROS: "rolling jazzy iron"
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -35,3 +52,5 @@ jobs:
       - name: Build and push
         run: |
           bash .github/build_and_push.sh
+        env:
+          ROS_DISTROS: ${{ env.ROS_DISTROS }}

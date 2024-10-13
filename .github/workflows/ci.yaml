@@ -1,15 +1,32 @@
 name: CI Workflow that runs hadolint and shellcheck
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 jobs:
+  check_files:
+    runs-on: ubuntu-latest
+    outputs:
+      run_checks: ${{ steps.check_files.outputs.run_checks }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for relevant file changes
+        id: check_files
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -qE '\.devcontainer/Dockerfile\.(base|full)|\.sh$'; then
+            echo "run_checks=true" >> $GITHUB_OUTPUT
+          else
+            echo "run_checks=false" >> $GITHUB_OUTPUT
+          fi
+
   hadolint:
+    needs: check_files
+    if: needs.check_files.outputs.run_checks == 'true'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: hadolint/hadolint-action@v3.1.0
       with:
         dockerfile: .devcontainer/Dockerfile.base
@@ -20,6 +37,8 @@ jobs:
         ignore: DL3008,SC2046,SC2016
 
   shellcheck:
+    needs: check_files
+    if: needs.check_files.outputs.run_checks == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -27,3 +46,8 @@ jobs:
       uses: ludeeus/action-shellcheck@master
       env:
         SHELLCHECK_OPTS: -e SC2016 -e SC1091 -e SC2181 -e SC2086 -e SC1090
+
+  dummy_job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job always runs to ensure the workflow completes"

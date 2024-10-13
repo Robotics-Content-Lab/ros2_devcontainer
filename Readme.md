@@ -1,5 +1,7 @@
 # ROS 2 Devcontainer Setup
 
+[![CI](https://github.com/Robotics-Content-Lab/ros2_devcontainer/actions/workflows/ci.yaml/badge.svg?event=push)](https://github.com/Robotics-Content-Lab/ros2_devcontainer/actions/workflows/ci.yaml) [![CD](https://github.com/Robotics-Content-Lab/ros2_devcontainer/actions/workflows/release.yaml/badge.svg?event=workflow_run)](https://github.com/Robotics-Content-Lab/ros2_devcontainer/actions/workflows/release.yaml)
+
 ## Getting Started
 
 ### Prerequisites
