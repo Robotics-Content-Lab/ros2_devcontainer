@@ -1,0 +1,55 @@
+// See https://aka.ms/vscode-remote/devcontainer.json for format details.
+{
+	"dockerFile": "Dockerfile",
+	"build": {
+		"args": {
+			"ROS_DISTRO": "jazzy",
+			"USERNAME": "ros_user"
+		}
+	},
+	"context": ".",
+	"remoteUser": "ros_user",
+    "postCreateCommand": "/usr/local/bin/build_ws",
+	"runArgs": [
+		"--name=ros2_devcontainer",  // sets the name of the container
+		"--network=host",  // allows the container to access the host network
+		"--cap-add=SYS_PTRACE",  // adds the ability to use ptrace for debugging
+		"--security-opt=seccomp:unconfined", // allows the container to run without a security profile for debugging
+		"--security-opt=apparmor:unconfined", // allows the container more access to the host network
+		"--volume=/tmp/.X11-unix:/tmp/.X11-unix",  // Only needed on linux, Comment if you are on Windows
+		"--mount", "type=bind,source=${localWorkspaceFolder}/src/,target=/home/ros_user/ros2_ws/src", // mount the ros2_src folder into the container
+		"--gpus=all",  // this is needed for hardware acceleration on nvidia gpus
+		// "--volume=/mnt/wslg:/mnt/wslg", // uncomment to use wslg
+		"--ipc=host", // allow the container to share the same Inter-Process Communcation (IPC) namespace as the host
+		"--device=/dev/dri" // uncomment to use intel iGPU
+	],
+	"containerEnv": {
+		"DISPLAY": "${localEnv:DISPLAY}", // Needed for GUI try ":0" for windows
+		"WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",  
+		"XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+		"PULSE_SERVER": "${localEnv:PULSE_SERVER}",
+		"ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+		// uncomment if you are on ARM architecture
+		// "LIBGL_ALWAYS_SOFTWARE": "1" // Needed for software rendering of opengl
+	},
+	// Set *default* container specific settings.json values on container create.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"althack.ament-task-provider",
+				"betwo.b2-catkin-tools",
+				"DotJoshJohnson.xml",
+				"ms-azuretools.vscode-docker",
+				"ms-iot.vscode-ros",
+				"ms-python.python",
+				"ms-vscode.cpptools",
+				"redhat.vscode-yaml",
+				"smilerobotics.urdf",
+				"streetsidesoftware.code-spell-checker",
+				"twxs.cmake",
+				"yzhang.markdown-all-in-one",
+				"zachflower.uncrustify"
+			]
+		}
+	}
+}

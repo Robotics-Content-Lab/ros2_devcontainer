@@ -1,0 +1,31 @@
+ARG ROS_DISTRO=jazzy
+FROM ghcr.io/roboticscontentlab/ros2:${ROS_DISTRO}-base
+
+ARG USERNAME=ros_user
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+ENV ROS_DISTRO=$ROS_DISTRO
+ENV DEBIAN_FRONTEND=noninteractive
+ENV ROS_WORKSPACE=/home/${USERNAME}/ros2_ws
+ENV COLCON_HOME=/home/${USERNAME}/.colcon
+
+# Set the shell to support the "source" command
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+
+RUN apt-get update && apt-get upgrade -yq && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install ROS 2 utilities
+RUN apt-get update && apt-get install -y \
+    ros-${ROS_DISTRO}-rqt* --no-install-recommends && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /tmp/rquirements.txt
+RUN pip install --no-cache-dir -r /tmp/rquirements.txt || true
+
+WORKDIR ${ROS_WORKSPACE}/
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
