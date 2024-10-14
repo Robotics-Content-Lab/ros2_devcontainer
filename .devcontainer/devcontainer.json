@@ -11,6 +11,7 @@
 	// },
 	// "context": ".",
 	"remoteUser": "ros_user",
+	"onCreateCommand": "xhost +local:docker",
 	"postCreateCommand": "/usr/local/bin/build_ws",
 	"runArgs": [
 		"--name=ros2_devcontainer",  // sets the name of the container
