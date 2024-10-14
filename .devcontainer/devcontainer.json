@@ -1,15 +1,17 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
-	"dockerFile": "Dockerfile",
-	"build": {
-		"args": {
-			"ROS_DISTRO": "jazzy",
-			"USERNAME": "ros_user"
-		}
-	},
-	"context": ".",
+	"image": "ghcr.io/robotics-content-lab/jazzy:full",
+	// Uncomment the next block if you want to modify the container created by building the Dockerfile
+	// "dockerFile": "Dockerfile.full",
+	// "build": {
+	// 	"args": {
+	// 		"ROS_DISTRO": "jazzy",
+	// 		"USERNAME": "ros_user"
+	// 	}
+	// },
+	// "context": ".",
 	"remoteUser": "ros_user",
-    "postCreateCommand": "/usr/local/bin/build_ws",
+	"postCreateCommand": "/usr/local/bin/build_ws",
 	"runArgs": [
 		"--name=ros2_devcontainer",  // sets the name of the container
 		"--network=host",  // allows the container to access the host network
