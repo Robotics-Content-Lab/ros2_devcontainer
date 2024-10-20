@@ -39,7 +39,6 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"althack.ament-task-provider",
 				"betwo.b2-catkin-tools",
 				"DotJoshJohnson.xml",
 				"ms-azuretools.vscode-docker",
